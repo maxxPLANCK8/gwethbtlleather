@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f5f1;
+  --background-warm: #efebe4;
+  --surface: #ebe5dc;
+  --surface-strong: #ded6ca;
+  --border: #d6cec1;
+  --text: #1d1713;
+  --body: #62584e;
+  --muted: #8f8377;
+  --leather: #5a351f;
+  --primary: #5a351f;
+  --cognac: #7a4a2c;
+  --brass: #9d741e;
+  --burgundy: #5c2b24;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-warm: var(--background-warm);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-border: var(--border);
+  --color-ink: var(--text);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-leather: var(--leather);
+  --color-primary: var(--primary);
+  --color-cognac: var(--cognac);
+  --color-brass: var(--brass);
+  --color-burgundy: var(--burgundy);
+  --font-serif: var(--font-editorial);
+  --font-sans: var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--body);
+  font-family: var(--font-body), Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 25% 20%, rgba(90, 53, 31, 0.12), transparent 28rem),
+    radial-gradient(circle at 80% 10%, rgba(157, 116, 30, 0.08), transparent 24rem);
+  mix-blend-mode: multiply;
+}
+
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--burgundy);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--brass);
+  color: var(--text);
+}
+
+.container-shell {
+  width: min(100% - 2rem, 75rem);
+  margin-inline: auto;
+}
+
+.section-title {
+  display: grid;
+  grid-template-columns: minmax(2rem, 1fr) auto minmax(2rem, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.section-title::before,
+.section-title::after {
+  content: "";
+  height: 1px;
+  background: var(--border);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.image-lift {
+  transition: transform 500ms ease, filter 500ms ease;
+}
+
+.group:hover .image-lift {
+  transform: scale(1.035);
+  filter: saturate(1.02) contrast(1.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
