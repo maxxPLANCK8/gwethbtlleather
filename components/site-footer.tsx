@@ -27,7 +27,7 @@ export function SiteFooter() {
             </a>
             <br />
             <a
-              href="https://wa.me/254733460088"
+              href="https://wa.me/254733406088"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm transition hover:text-amber-600"

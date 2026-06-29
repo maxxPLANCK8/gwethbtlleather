@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { MiniCart } from "@/components/mini-cart";
 import { CampaignModal } from "@/components/campaign-modal";
 import { SitePreloader } from "@/components/site-preloader";
+import WhatsAppFloat from "@/components/ui/whatsapp-float";
 
 const editorial = Cormorant_Garamond({
   subsets: ["latin"],
@@ -64,6 +65,7 @@ export default function RootLayout({
         <SiteFooter />
         <MiniCart />
         <CampaignModal />
+        <WhatsAppFloat />
       </body>
     </html>
   );
