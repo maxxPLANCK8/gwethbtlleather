@@ -1,83 +1,7 @@
 "use client";
 
 import React from "react";
-
-type TestimonialT = {
-  image: string;
-  name: string;
-  handle: string;
-  review: string;
-};
-
-const TESTIMONIALS_ROW1: TestimonialT[] = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&auto=format&fit=crop&q=60",
-    name: "Amina Wanjiku",
-    handle: "@aminaw",
-    review:
-      "The Executive Laptop Tote is everything. Full-grain leather, fits my 15\" MacBook perfectly. Worth every shilling."
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?w=200&auto=format&fit=crop&q=60",
-    name: "Brian Otieno",
-    handle: "@brianotieno",
-    review:
-      "Bought the Kwarme Messenger Bag for work trips. Three months in and it looks better than the day I got it."
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&auto=format&fit=crop&q=60",
-    name: "David Kamau",
-    handle: "@davidkamau",
-    review:
-      "Gifted my whole team GWETHBTL wallets for the holidays. The corporate gifting service was seamless."
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=60",
-    name: "Grace Muthoni",
-    handle: "@gracemuthoni",
-    review:
-      "I was skeptical ordering online but the quality blew me away. The cognac tote is my everyday bag now."
-  }
-];
-
-const TESTIMONIALS_ROW2: TestimonialT[] = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&auto=format&fit=crop&q=60",
-    name: "Kevin Mwangi",
-    handle: "@kevinmwangi",
-    review:
-      "Nairobi heat is no joke but this leather has held up perfectly. Genuinely handcrafted -- you can tell."
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=60",
-    name: "Fatuma Abdullahi",
-    handle: "@fatumabd",
-    review:
-      "Ordered the backpack for my daughter starting campus. She gets compliments on it every single week."
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=60",
-    name: "James Kariuki",
-    handle: "@jameskariuki",
-    review:
-      "The stitching, the smell, the weight -- this is proper leather. Not the fake stuff flooding the market."
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=200&auto=format&fit=crop&q=60",
-    name: "Lydia Chebet",
-    handle: "@lydiachebet",
-    review:
-      "Dorcas personally followed up after my order. That kind of care is rare. The bag is stunning too."
-  }
-];
+import type { Testimonial } from "@/sanity/lib/queries";
 
 const StarIcon = () => (
   <svg
@@ -91,7 +15,7 @@ const StarIcon = () => (
   </svg>
 );
 
-const Card = ({ card }: { card: TestimonialT }) => (
+const Card = ({ card }: { card: Testimonial }) => (
   <div className="mx-4 w-72 shrink-0 rounded-lg border border-stone-100 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md">
     <div className="flex items-center gap-3">
       <img
@@ -105,7 +29,7 @@ const Card = ({ card }: { card: TestimonialT }) => (
       </div>
     </div>
     <div className="mt-3 flex gap-0.5">
-      {[...Array(5)].map((_, i) => (
+      {[...Array(card.rating || 5)].map((_, i) => (
         <StarIcon key={i} />
       ))}
     </div>
@@ -120,7 +44,7 @@ function MarqueeRow({
   reverse = false,
   speed = 30
 }: {
-  data: TestimonialT[];
+  data: Testimonial[];
   reverse?: boolean;
   speed?: number;
 }) {
@@ -145,7 +69,15 @@ function MarqueeRow({
   );
 }
 
-export default function TestimonialsMarquee() {
+export default function TestimonialsMarquee({
+  testimonials
+}: {
+  testimonials: Testimonial[];
+}) {
+  const midpoint = Math.ceil(testimonials.length / 2);
+  const rowOne = testimonials.slice(0, midpoint);
+  const rowTwo = testimonials.slice(midpoint);
+
   return (
     <>
       <style>{`
@@ -167,8 +99,8 @@ export default function TestimonialsMarquee() {
           </p>
         </div>
         <div className="flex flex-col gap-6">
-          <MarqueeRow data={TESTIMONIALS_ROW1} reverse={false} speed={30} />
-          <MarqueeRow data={TESTIMONIALS_ROW2} reverse speed={30} />
+          <MarqueeRow data={rowOne} reverse={false} speed={30} />
+          <MarqueeRow data={rowTwo.length ? rowTwo : rowOne} reverse speed={30} />
         </div>
       </section>
     </>

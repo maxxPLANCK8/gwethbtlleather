@@ -7,30 +7,27 @@ import { Newsletter } from "@/components/newsletter";
 import { ProductCard } from "@/components/product-card";
 import { ProductOfMonth } from "@/components/product-of-month";
 import TestimonialsMarquee from "@/components/ui/testimonials-marquee";
-import { featuredProducts, productOfMonth } from "@/lib/data";
+import {
+  getFeaturedProducts,
+  getHeroSlides,
+  getProductOfMonth,
+  getRecentBlogPosts,
+  getTestimonials
+} from "@/sanity/lib/queries";
 
-const articles = [
-  {
-    title: "How to care for genuine leather in Nairobi's dry and rainy seasons",
-    href: "/blog/how-to-care-for-genuine-leather-nairobi",
-    image: "/images/gwethbtl/tea-briefcase.png"
-  },
-  {
-    title: "Choosing the right laptop tote for everyday work",
-    href: "/blog/choosing-the-right-laptop-tote",
-    image: "/images/gwethbtl/green-croc-tote.png"
-  },
-  {
-    title: "Behind the finish: what skilled artisans look for in leather",
-    href: "/blog/behind-the-finish-what-artisans-look-for",
-    image: "/images/gwethbtl/burgundy-executive-bag.png"
-  }
-];
+export default async function Home() {
+  const [heroSlides, featuredProducts, productOfMonth, articles, testimonials] =
+    await Promise.all([
+      getHeroSlides(),
+      getFeaturedProducts(),
+      getProductOfMonth(),
+      getRecentBlogPosts(3),
+      getTestimonials()
+    ]);
 
-export default function Home() {
   return (
     <main>
-      <HeroSection />
+      <HeroSection slides={heroSlides} />
       <section className="container-shell py-12 sm:py-14">
         <div className="section-title mb-8">
           <h2 className="text-center text-xl font-semibold text-ink">
@@ -59,7 +56,7 @@ export default function Home() {
       <ProductOfMonth product={productOfMonth} />
       <LifestyleStory />
       <CampaignBand />
-      <TestimonialsMarquee />
+      <TestimonialsMarquee testimonials={testimonials} />
       <section
         id="corporate"
         className="border-t border-stone-100 bg-white py-12 text-center"
@@ -96,7 +93,7 @@ export default function Home() {
             <article key={article.title}>
               <div className="relative aspect-[4/3] overflow-hidden bg-surface">
                 <Image
-                  src={article.image}
+                  src={article.image ?? "/images/gwethbtl/tea-briefcase.png"}
                   alt={article.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
@@ -110,7 +107,7 @@ export default function Home() {
                 By GWETHBTL Leather | April 2026
               </p>
               <Link
-                href={article.href}
+                href={`/blog/${article.slug}`}
                 className="mt-4 inline-flex min-h-10 items-center bg-[#5a351f] px-5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-leather"
               >
                 Read more

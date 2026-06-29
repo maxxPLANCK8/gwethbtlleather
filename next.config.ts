@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "thongeleather.com"
+        hostname: "cdn.sanity.io"
       }
     ]
   }

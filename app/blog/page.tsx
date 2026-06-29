@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getRecentBlogPosts } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -9,28 +10,9 @@ export const metadata: Metadata = {
   }
 };
 
-const articles = [
-  {
-    title: "How to care for genuine leather in Nairobi's dry and rainy seasons",
-    slug: "how-to-care-for-genuine-leather-nairobi",
-    author: "GWETHBTL Leather",
-    date: "April 2026"
-  },
-  {
-    title: "Choosing the right laptop tote for everyday work",
-    slug: "choosing-the-right-laptop-tote",
-    author: "GWETHBTL Leather",
-    date: "April 2026"
-  },
-  {
-    title: "Behind the finish: what skilled artisans look for in leather",
-    slug: "behind-the-finish-what-artisans-look-for",
-    author: "GWETHBTL Leather",
-    date: "April 2026"
-  }
-];
+export default async function BlogPage() {
+  const articles = await getRecentBlogPosts();
 
-export default function BlogPage() {
   return (
     <main className="bg-background">
       <section className="container-shell py-14 sm:py-20">
@@ -49,7 +31,7 @@ export default function BlogPage() {
                 <Link href={`/blog/${article.slug}`}>{article.title}</Link>
               </h2>
               <p className="mt-4 text-sm leading-7 text-body">
-                Full article coming soon.
+                {article.excerpt}
               </p>
             </article>
           ))}

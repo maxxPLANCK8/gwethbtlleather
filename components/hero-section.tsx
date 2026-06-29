@@ -6,43 +6,12 @@ import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { HeroSlide } from "@/sanity/lib/queries";
 
-const slides = [
-  {
-    label: "GWETHBTL",
-    headline: "Handcrafted in Kenya. Designed for the world.",
-    subheadline:
-      "Premium leather bags and accessories made by skilled artisans for modern work, travel, and everyday carry.",
-    cta: "Shop signature pieces",
-    href: "/collections/laptop-totes",
-    image: "/images/gwethbtl/hero-burgundy-bag-wide.png",
-    alt: "Burgundy leather executive bag on a wooden desk"
-  },
-  {
-    label: "WORK EDIT",
-    headline: "The executive standard.",
-    subheadline:
-      "Laptop totes, messenger bags, wallets, backpacks, and belts with practical interiors and a polished finish.",
-    cta: "Explore work bags",
-    href: "/collections/messenger-bags",
-    image: "/images/gwethbtl/hero-green-tote-wide.png",
-    alt: "Green leather tote on a polished desk"
-  },
-  {
-    label: "OUR STORY",
-    headline: "One standard, every piece.",
-    subheadline:
-      "A Kenyan leather house led by Dorcas Odiembo, trusted at home and across the world.",
-    cta: "Our story",
-    href: "/about",
-    image: "/images/gwethbtl/hero-tea-briefcase-wide.png",
-    alt: "Leather work bag beside a cup of tea"
-  }
-];
-
-export function HeroSection() {
+export function HeroSection({ slides }: { slides: HeroSlide[] }) {
   const [reducedMotion, setReducedMotion] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const selectedSlide = slides[selectedIndex] ?? slides[0];
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -142,19 +111,19 @@ export function HeroSection() {
       <div className="container-shell pointer-events-none absolute inset-x-0 top-0 z-20 flex h-full min-h-screen items-center">
         <div className="pointer-events-auto max-w-[37.5rem] pt-16 sm:pt-20">
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-[#c99b48]">
-            {slides[selectedIndex].label}
+            {selectedSlide.label}
           </p>
           <h1 className="text-balance font-serif text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.94] text-white">
-            {slides[selectedIndex].headline}
+            {selectedSlide.headline}
           </h1>
           <p className="mt-6 max-w-[35rem] text-base leading-8 text-white/90 sm:text-lg">
-            {slides[selectedIndex].subheadline}
+            {selectedSlide.subheadline}
           </p>
           <Link
-            href={slides[selectedIndex].href}
+            href={selectedSlide.href}
             className="mt-8 inline-flex min-h-12 items-center justify-center bg-[#5a351f] px-8 py-3.5 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-[#3f2616] active:translate-y-px"
           >
-            {slides[selectedIndex].cta}
+            {selectedSlide.cta}
           </Link>
         </div>
       </div>

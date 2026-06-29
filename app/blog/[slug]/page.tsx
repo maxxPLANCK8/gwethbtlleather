@@ -1,26 +1,7 @@
+import { PortableText } from "@portabletext/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-
-const articles = [
-  {
-    title: "How to care for genuine leather in Nairobi's dry and rainy seasons",
-    slug: "how-to-care-for-genuine-leather-nairobi",
-    author: "GWETHBTL Leather",
-    date: "April 2026"
-  },
-  {
-    title: "Choosing the right laptop tote for everyday work",
-    slug: "choosing-the-right-laptop-tote",
-    author: "GWETHBTL Leather",
-    date: "April 2026"
-  },
-  {
-    title: "Behind the finish: what skilled artisans look for in leather",
-    slug: "behind-the-finish-what-artisans-look-for",
-    author: "GWETHBTL Leather",
-    date: "April 2026"
-  }
-];
+import { getBlogPost, getBlogSlugs } from "@/sanity/lib/queries";
 
 type BlogArticlePageProps = {
   params: Promise<{
@@ -28,17 +9,15 @@ type BlogArticlePageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return articles.map((article) => ({
-    slug: article.slug
-  }));
+export async function generateStaticParams() {
+  return getBlogSlugs();
 }
 
 export async function generateMetadata({
   params
 }: BlogArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = articles.find((item) => item.slug === slug);
+  const article = await getBlogPost(slug);
 
   if (!article) {
     return {
@@ -56,7 +35,7 @@ export async function generateMetadata({
 
 export default async function BlogArticlePage({ params }: BlogArticlePageProps) {
   const { slug } = await params;
-  const article = articles.find((item) => item.slug === slug);
+  const article = await getBlogPost(slug);
 
   if (!article) {
     notFound();
@@ -72,8 +51,13 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
           {article.title}
         </h1>
         <p className="mt-7 text-base leading-8 text-body">
-          Full article coming soon.
+          {article.excerpt}
         </p>
+        {article.body?.length ? (
+          <div className="prose prose-stone mt-8 max-w-none text-body">
+            <PortableText value={article.body} />
+          </div>
+        ) : null}
       </article>
     </main>
   );
