@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import type { Product } from "@/lib/data";
-import { formatPrice } from "@/lib/data";
+import { colorHex, formatPrice, primaryImage } from "@/lib/data";
 import { useCartStore } from "@/lib/cart-store";
 
 export function ProductOfMonth({ product }: { product: Product }) {
@@ -24,7 +24,7 @@ export function ProductOfMonth({ product }: { product: Product }) {
       <div className="container-shell grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <div className="relative aspect-[4/5] overflow-hidden bg-white sm:aspect-[16/11] lg:aspect-[5/4]">
           <Image
-            src={product.images.primary}
+            src={primaryImage(product)}
             alt={product.name}
             fill
             sizes="(max-width: 1024px) 100vw, 52vw"
@@ -61,7 +61,7 @@ export function ProductOfMonth({ product }: { product: Product }) {
                         ? "ring-2 ring-ink ring-offset-2"
                         : "border-black/10"
                     }`}
-                    style={{ backgroundColor: color.value }}
+                    style={{ backgroundColor: colorHex(color) }}
                   />
                 </button>
               ))}

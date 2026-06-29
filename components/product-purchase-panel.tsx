@@ -1,9 +1,10 @@
 "use client";
 
-import { Minus, Plus, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import type { Product } from "@/lib/data";
-import { formatPrice } from "@/lib/data";
+import { colorHex, formatPrice } from "@/lib/data";
+import { QuantityStepper } from "@/components/quantity-stepper";
 import { useCartStore } from "@/lib/cart-store";
 
 export function ProductPurchasePanel({ product }: { product: Product }) {
@@ -45,32 +46,14 @@ export function ProductPurchasePanel({ product }: { product: Product }) {
                     ? "ring-2 ring-ink ring-offset-2"
                     : "border-black/10"
                 }`}
-                style={{ backgroundColor: color.value }}
+                style={{ backgroundColor: colorHex(color) }}
               />
             </button>
           ))}
         </div>
       </fieldset>
       <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-        <div className="flex h-12 w-36 items-center justify-between rounded-full border border-border bg-white px-2">
-          <button
-            type="button"
-            aria-label="Decrease quantity"
-            className="grid min-h-9 min-w-9 place-items-center rounded-full text-ink hover:bg-surface"
-            onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-          >
-            <Minus size={16} aria-hidden />
-          </button>
-          <span className="font-semibold text-ink">{quantity}</span>
-          <button
-            type="button"
-            aria-label="Increase quantity"
-            className="grid min-h-9 min-w-9 place-items-center rounded-full text-ink hover:bg-surface"
-            onClick={() => setQuantity((value) => value + 1)}
-          >
-            <Plus size={16} aria-hidden />
-          </button>
-        </div>
+        <QuantityStepper value={quantity} min={1} max={10} onChange={setQuantity} />
         <button
           type="button"
           className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-leather"

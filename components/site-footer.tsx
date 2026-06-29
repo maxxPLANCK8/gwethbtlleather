@@ -7,7 +7,7 @@ export function SiteFooter() {
       <div className="container-shell grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.75fr_0.75fr_1.25fr] lg:py-16">
         <div>
           <p className="font-serif text-3xl font-bold uppercase tracking-[0.12em] text-[#b08a38]">
-            GWETHBTL
+            GWETHBTL Leather
           </p>
           <p className="mt-4 max-w-sm text-sm leading-7 text-white/68">
             Timeless Leather, Modern Lifestyle.
@@ -17,8 +17,23 @@ export function SiteFooter() {
           </p>
           <p className="mt-5 text-xs leading-6 text-white/55">
             Nairobi, Kenya<br />
-            @gwethbtl_leather<br />
-            WhatsApp via contact page
+            <a
+              href="https://instagram.com/gwethbtl_leather"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm transition hover:text-amber-600"
+            >
+              @gwethbtl_leather
+            </a>
+            <br />
+            <a
+              href="https://wa.me/254733460088"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm transition hover:text-amber-600"
+            >
+              WhatsApp us
+            </a>
           </p>
         </div>
         <div>
@@ -40,10 +55,31 @@ export function SiteFooter() {
             Quick links
           </h2>
           <ul className="mt-4 grid gap-3 text-sm text-white/65">
-            <li>Shipping</li>
-            <li>Care guide</li>
-            <li>Returns</li>
-            <li>Corporate gifting</li>
+            <li>
+              <Link href="/shipping" className="hover:text-white">
+                Shipping
+              </Link>
+            </li>
+            <li>
+              <Link href="/blog" className="hover:text-white">
+                Blog
+              </Link>
+            </li>
+            <li>
+              <Link href="/care-guide" className="hover:text-white">
+                Care guide
+              </Link>
+            </li>
+            <li>
+              <Link href="/returns" className="hover:text-white">
+                Returns
+              </Link>
+            </li>
+            <li>
+              <Link href="/corporate-gifting" className="hover:text-white">
+                Corporate gifting
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
@@ -73,8 +109,20 @@ export function SiteFooter() {
           </form>
         </div>
       </div>
-      <div className="container-shell border-t border-white/10 py-5 text-xs text-white/45">
-        Copyright GWETHBTL Leather. All rights reserved.
+      <div className="container-shell py-5">
+        <div className="mt-6 flex items-center justify-between border-t border-stone-700 pt-6">
+          <p className="text-xs text-stone-400">
+            © {new Date().getFullYear()} GWETHBTL Leather. All rights reserved.
+          </p>
+          <a
+            href="https://www.planckmx.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-medium tracking-wide text-[#b08a38] transition hover:text-[#d0a64a]"
+          >
+            PLANCKMX
+          </a>
+        </div>
       </div>
     </footer>
   );

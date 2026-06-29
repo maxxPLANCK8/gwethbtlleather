@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Minus, Plus, Trash2, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRef } from "react";
-import { formatPrice } from "@/lib/data";
+import { formatPrice, primaryImage } from "@/lib/data";
 import { useCartStore } from "@/lib/cart-store";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 
@@ -71,7 +71,7 @@ export function MiniCart() {
                 <li key={item.id} className="grid grid-cols-[6rem_1fr] gap-4">
                   <div className="relative aspect-[4/5] overflow-hidden bg-surface">
                     <Image
-                      src={item.product.images.primary}
+                      src={primaryImage(item.product)}
                       alt={item.product.name}
                       fill
                       sizes="96px"

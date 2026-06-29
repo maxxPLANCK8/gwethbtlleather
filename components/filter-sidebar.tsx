@@ -1,4 +1,4 @@
-import { categories, products } from "@/lib/data";
+import { categories, colorHex, products } from "@/lib/data";
 
 const colors = Array.from(
   new Map(
@@ -55,7 +55,7 @@ export function FilterSidebar() {
               >
                 <span
                   className="h-6 w-6 rounded-full border border-black/10"
-                  style={{ backgroundColor: color.value }}
+                  style={{ backgroundColor: colorHex(color) }}
                 />
               </button>
             ))}

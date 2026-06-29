@@ -26,7 +26,6 @@ export default function AboutPage() {
             src="/images/gwethbtl/akinyi-laptop-tote.png"
             alt="GWETHBTL artisan working on a leather bag"
             fill
-            priority
             sizes="(max-width: 1024px) 100vw, 48vw"
             className="object-cover"
           />

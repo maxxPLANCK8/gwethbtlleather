@@ -19,7 +19,6 @@ export function ImageGallery({
           src={active}
           alt={name}
           fill
-          priority
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover transition duration-500 hover:scale-[1.03]"
         />

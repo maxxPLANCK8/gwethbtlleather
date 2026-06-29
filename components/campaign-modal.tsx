@@ -75,8 +75,8 @@ export function CampaignModal() {
             Timeless leather, modern lifestyle.
           </h2>
           <p className="mt-5 text-base leading-7 text-body">
-            Join 10,000+ clients choosing handcrafted Kenyan leather for work,
-            travel, gifting, and everyday carry.
+            Discover handcrafted Kenyan leather for work, travel, gifting, and
+            everyday carry.
           </p>
           <Link
             href="/collections/laptop-totes"

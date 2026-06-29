@@ -22,7 +22,7 @@ export function LifestyleStory() {
         <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/70">
           Founded by Dorcas Odiembo, GWETHBTL Leather is a premium Kenyan
           leather brand creating durable laptop totes, wallets, backpacks,
-          messenger bags, and belts for 10,000+ clients.
+          messenger bags, and belts.
         </p>
         <Link
           href="/about"

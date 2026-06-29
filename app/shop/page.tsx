@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Grid2X2, Heart, List, Search } from "lucide-react";
 import { ShopAddToCartButton } from "@/components/shop-add-to-cart-button";
-import { categories, formatPrice, products } from "@/lib/data";
+import { categories, colorHex, formatPrice, primaryImage, products } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -49,7 +49,6 @@ export default function ShopPage() {
           src="/images/gwethbtl/hero-green-tote-wide.png"
           alt="GWETHBTL leather laptop bag detail"
           fill
-          priority
           sizes="100vw"
           className="object-cover object-center"
         />
@@ -95,7 +94,7 @@ export default function ShopPage() {
                   <div className="relative aspect-[4/5] overflow-hidden bg-surface">
                     <Link href={`/products/${product.slug}`}>
                       <Image
-                        src={product.images.primary}
+                        src={primaryImage(product)}
                         alt={product.displayName}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
@@ -222,7 +221,7 @@ export default function ShopPage() {
                     type="button"
                     aria-label={`Choose ${color.name}`}
                     className="h-4 w-4 rounded-full border border-black/15"
-                    style={{ backgroundColor: color.value }}
+                    style={{ backgroundColor: colorHex(color) }}
                   />
                 ))}
               </div>
@@ -241,7 +240,7 @@ export default function ShopPage() {
                   >
                     <span className="relative aspect-square overflow-hidden bg-surface">
                       <Image
-                        src={product.images.primary}
+                        src={primaryImage(product)}
                         alt={product.name}
                         fill
                         sizes="72px"

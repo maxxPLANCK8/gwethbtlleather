@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronDown, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { useState } from "react";
 import { useCartStore } from "@/lib/cart-store";
-import { categories, products } from "@/lib/data";
+import { categories, primaryImage, products } from "@/lib/data";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,7 +80,7 @@ export function SiteHeader() {
                   </h2>
                   <ul className="mt-6 grid gap-4 text-sm text-body">
                     <li>
-                      <Link href="/collections/wallets" className="transition hover:text-leather">
+                      <Link href="/wishlist" className="transition hover:text-leather">
                         Wishlist
                       </Link>
                     </li>
@@ -106,7 +106,7 @@ export function SiteHeader() {
                   className="relative min-h-64 overflow-hidden bg-surface"
                 >
                   <Image
-                    src={products[0].images.primary}
+                    src={primaryImage(products[0])}
                     alt={products[0].name}
                     fill
                     sizes="33vw"

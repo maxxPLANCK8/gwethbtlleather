@@ -29,10 +29,10 @@ const slides = [
     alt: "Green leather tote on a polished desk"
   },
   {
-    label: "10,000+ CLIENTS",
-    headline: "10,000 clients. One standard.",
+    label: "OUR STORY",
+    headline: "One standard, every piece.",
     subheadline:
-      "A Kenyan leather house led by Dorcas Odiembo, trusted by clients at home and across the world.",
+      "A Kenyan leather house led by Dorcas Odiembo, trusted at home and across the world.",
     cta: "Our story",
     href: "/about",
     image: "/images/gwethbtl/hero-tea-briefcase-wide.png",

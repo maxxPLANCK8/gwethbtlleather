@@ -4,7 +4,7 @@ export function Newsletter() {
       <div className="container-shell max-w-3xl text-center">
         <div>
           <h2 className="text-xl font-semibold text-ink">
-            Join 10,000+ clients
+            Join the GWETHBTL list
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-xs leading-6 text-muted">
             Receive new leather drops, care notes, and studio updates from

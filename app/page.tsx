@@ -6,46 +6,23 @@ import { LifestyleStory } from "@/components/lifestyle-story";
 import { Newsletter } from "@/components/newsletter";
 import { ProductCard } from "@/components/product-card";
 import { ProductOfMonth } from "@/components/product-of-month";
+import TestimonialsMarquee from "@/components/ui/testimonials-marquee";
 import { featuredProducts, productOfMonth } from "@/lib/data";
-
-const corporateLogos = [
-  {
-    name: "EDOMX",
-    image: "https://thongeleather.com/assets/img/client/edom.webp"
-  },
-  {
-    name: "Fair Trade",
-    image: "https://thongeleather.com/assets/img/client/fair-trade.webp"
-  },
-  {
-    name: "SAMSUNG",
-    image: "https://thongeleather.com/assets/img/client/samsung.webp"
-  },
-  {
-    name: "Microsoft",
-    image: "https://thongeleather.com/assets/img/client/microsoft.webp"
-  },
-  {
-    name: "Studio Fit",
-    image: "https://thongeleather.com/assets/img/client/studio-fit.webp"
-  },
-  {
-    name: "AAB",
-    image: "https://thongeleather.com/assets/img/client/aab.webp"
-  }
-];
 
 const articles = [
   {
     title: "How to care for genuine leather in Nairobi's dry and rainy seasons",
+    href: "/blog/how-to-care-for-genuine-leather-nairobi",
     image: "/images/gwethbtl/tea-briefcase.png"
   },
   {
     title: "Choosing the right laptop tote for everyday work",
+    href: "/blog/choosing-the-right-laptop-tote",
     image: "/images/gwethbtl/green-croc-tote.png"
   },
   {
     title: "Behind the finish: what skilled artisans look for in leather",
+    href: "/blog/behind-the-finish-what-artisans-look-for",
     image: "/images/gwethbtl/burgundy-executive-bag.png"
   }
 ];
@@ -82,32 +59,27 @@ export default function Home() {
       <ProductOfMonth product={productOfMonth} />
       <LifestyleStory />
       <CampaignBand />
-      <section id="corporate" className="container-shell py-12 sm:py-16">
-        <div className="section-title mb-5">
-          <h2 className="text-center text-xl font-semibold text-ink">
-            Corporate leather, made in Kenya
-          </h2>
-        </div>
-        <p className="mx-auto max-w-3xl text-center text-xs leading-6 text-muted">
-          Branded leather gifts, employee essentials, and client keepsakes
-          produced with the same GWETHBTL standard trusted by 10,000+ clients.
+      <TestimonialsMarquee />
+      <section
+        id="corporate"
+        className="border-t border-stone-100 bg-white py-12 text-center"
+      >
+        <p className="mb-2 text-xs uppercase tracking-widest text-amber-700">
+          Corporate Gifting
         </p>
-        <div className="mx-auto mt-9 grid max-w-3xl grid-cols-2 gap-5 text-center sm:grid-cols-3">
-          {corporateLogos.map((logo) => (
-            <div
-              key={logo.name}
-              className="grid min-h-16 place-items-center px-4"
-            >
-              <Image
-                src={logo.image}
-                alt={`${logo.name} logo`}
-                width={140}
-                height={64}
-                className="max-h-14 w-auto object-contain grayscale"
-              />
-            </div>
-          ))}
-        </div>
+        <h3 className="mb-2 text-xl font-semibold text-stone-900">
+          Branded leather, made in Kenya
+        </h3>
+        <p className="mx-auto mb-6 max-w-md text-sm text-stone-500">
+          Employee gifts, client keepsakes, and branded accessories
+          handcrafted to your brief.
+        </p>
+        <a
+          href="#corporate"
+          className="inline-block rounded bg-stone-900 px-6 py-3 text-sm text-white transition hover:bg-stone-700"
+        >
+          Enquire about corporate orders
+        </a>
       </section>
       <section id="articles" className="container-shell pb-14 sm:pb-20">
         <div className="section-title mb-5">
@@ -138,7 +110,7 @@ export default function Home() {
                 By GWETHBTL Leather | April 2026
               </p>
               <Link
-                href="/collections/wallets"
+                href={article.href}
                 className="mt-4 inline-flex min-h-10 items-center bg-[#5a351f] px-5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-leather"
               >
                 Read more

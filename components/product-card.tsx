@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, Heart, ShoppingBag } from "lucide-react";
 import type { Product } from "@/lib/data";
-import { formatPrice } from "@/lib/data";
+import { colorHex, formatPrice, hoverImage, primaryImage } from "@/lib/data";
 import { useCartStore } from "@/lib/cart-store";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -16,14 +16,14 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="relative aspect-[4/5] overflow-hidden bg-surface">
         <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
           <Image
-            src={product.images.primary}
+            src={primaryImage(product)}
             alt={product.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             className="image-lift object-cover"
           />
           <Image
-            src={product.images.hover}
+            src={hoverImage(product)}
             alt=""
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -73,7 +73,7 @@ export function ProductCard({ product }: { product: Product }) {
               key={color.name}
               title={color.name}
               className="h-3 w-3 border border-black/10"
-              style={{ backgroundColor: color.value }}
+              style={{ backgroundColor: colorHex(color) }}
             />
           ))}
         </div>
