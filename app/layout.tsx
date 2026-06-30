@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
-import { MiniCart } from "@/components/mini-cart";
-import { CampaignModal } from "@/components/campaign-modal";
-import { SitePreloader } from "@/components/site-preloader";
-import WhatsAppFloat from "@/components/ui/whatsapp-float";
+import { SiteShell } from "@/components/site-shell";
 
 const editorial = Cormorant_Garamond({
   subsets: ["latin"],
@@ -59,13 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${editorial.variable} ${body.variable}`}>
       <body>
-        <SitePreloader />
-        <SiteHeader />
-        {children}
-        <SiteFooter />
-        <MiniCart />
-        <CampaignModal />
-        <WhatsAppFloat />
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
