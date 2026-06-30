@@ -1,15 +1,15 @@
-import { categories, colorHex, products } from "@/lib/data";
+import type { Product } from "@/lib/data";
+import { categories, colorHex, products as fallbackProducts } from "@/lib/data";
 
-const colors = Array.from(
-  new Map(
-    products.flatMap((product) =>
-      product.colors.map((color) => [color.name, color])
-    )
-  ).values()
-);
-
-export function FilterSidebar() {
+export function FilterSidebar({ products = fallbackProducts }: { products?: Product[] }) {
   const types = Array.from(new Set(products.map((product) => product.type)));
+  const colors = Array.from(
+    new Map(
+      products.flatMap((product) =>
+        product.colors.map((color) => [color.name, color])
+      )
+    ).values()
+  );
 
   return (
     <aside className="rounded-none border border-border bg-white p-5 lg:sticky lg:top-28 lg:self-start">

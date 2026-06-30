@@ -1,6 +1,11 @@
 import type { Product, ProductBadge } from "@/lib/data";
 import type { PortableTextBlock } from "@portabletext/react";
-import { featuredProducts as fallbackFeaturedProducts, productOfMonth as fallbackProductOfMonth } from "@/lib/data";
+import {
+  categories,
+  featuredProducts as fallbackFeaturedProducts,
+  productOfMonth as fallbackProductOfMonth,
+  products as fallbackProducts
+} from "@/lib/data";
 import { client, hasSanityConfig } from "./client";
 
 export type HeroSlide = {
@@ -39,10 +44,12 @@ export type BlogPost = BlogCard & {
 type SanityProduct = {
   _id: string;
   name?: string;
-  slug?: { current?: string };
+  slug?: string | { current?: string };
+  category?: string;
   price?: number;
   stockStatus?: string;
   images?: { asset?: { url?: string } }[];
+  imageUrl?: string;
   colors?: { name?: string; hex?: string }[];
   description?: string;
   featuredBlurb?: string;
@@ -51,11 +58,12 @@ type SanityProduct = {
 type SanityBlogPost = {
   _id: string;
   title?: string;
-  slug?: { current?: string };
+  slug?: string | { current?: string };
   publishedAt?: string;
   author?: string;
   excerpt?: string;
   coverImage?: { asset?: { url?: string } };
+  coverImageUrl?: string;
   body?: PortableTextBlock[];
 };
 
@@ -66,6 +74,7 @@ type SanityTestimonial = {
   review?: string;
   rating?: number;
   photo?: { asset?: { url?: string } };
+  photoUrl?: string;
 };
 
 export const fallbackHeroSlides: HeroSlide[] = [
@@ -221,6 +230,26 @@ const stockStatusToBadge = (status?: string): ProductBadge | undefined => {
   return undefined;
 };
 
+const slugValue = (slug?: string | { current?: string }) =>
+  typeof slug === "string" ? slug : slug?.current;
+
+const categoryNameFor = (value?: string) => {
+  const category = categories.find(
+    (item) => item.slug === value || item.name === value
+  );
+
+  return category?.name ?? "Laptop Totes";
+};
+
+const productImages = (product: SanityProduct) => {
+  const images =
+    product.images
+      ?.map((image) => image.asset?.url)
+      .filter((url): url is string => Boolean(url)) ?? [];
+
+  return product.imageUrl ? [product.imageUrl, ...images] : images;
+};
+
 const formatDate = (value?: string) => {
   if (!value) return "April 2026";
   return new Intl.DateTimeFormat("en-US", {
@@ -231,11 +260,11 @@ const formatDate = (value?: string) => {
 
 const mapProduct = (product: SanityProduct): Product => ({
   id: product._id,
-  slug: product.slug?.current ?? product._id,
+  slug: slugValue(product.slug) ?? product._id,
   name: product.name ?? "GWETHBTL Leather Product",
-  category: "Laptop Totes",
+  category: categoryNameFor(product.category),
   collection: "Sanity",
-  type: "Leather piece",
+  type: categoryNameFor(product.category).replace(/s$/, ""),
   price: product.price ?? 0,
   badge: stockStatusToBadge(product.stockStatus),
   colors:
@@ -245,10 +274,7 @@ const mapProduct = (product: SanityProduct): Product => ({
           hex: color.hex ?? "#5A351F"
         }))
       : [{ name: "Leather", hex: "#5A351F" }],
-  images:
-    product.images
-      ?.map((image) => image.asset?.url)
-      .filter((url): url is string => Boolean(url)) ?? [],
+  images: productImages(product),
   description: product.description ?? product.featuredBlurb ?? "",
   fullDescription: product.description ?? product.featuredBlurb ?? "",
   details: {
@@ -270,11 +296,11 @@ const mapProduct = (product: SanityProduct): Product => ({
 const mapBlogPost = (post: SanityBlogPost): BlogPost => ({
   id: post._id,
   title: post.title ?? "Untitled",
-  slug: post.slug?.current ?? post._id,
+  slug: slugValue(post.slug) ?? post._id,
   author: post.author ?? "GWETHBTL Leather",
   date: formatDate(post.publishedAt),
   excerpt: post.excerpt ?? "Full article coming soon.",
-  image: post.coverImage?.asset?.url,
+  image: post.coverImageUrl ?? post.coverImage?.asset?.url,
   body: post.body
 });
 
@@ -285,6 +311,7 @@ const mapTestimonial = (testimonial: SanityTestimonial): Testimonial => ({
   review: testimonial.review ?? "",
   rating: testimonial.rating ?? 5,
   image:
+    testimonial.photoUrl ??
     testimonial.photo?.asset?.url ??
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=60"
 });
@@ -314,12 +341,12 @@ export async function getHeroSlides() {
       subtext?: string;
       ctaText?: string;
       ctaLink?: string;
-      image?: { asset?: { url?: string } };
+      imageUrl?: string;
     }[]
   >(
-    `*[_type == "homepage"][0].heroSlides {
+    `*[_type == "homepage"][0].heroSlides[]{
       label, headline, subtext, ctaText, ctaLink,
-      image { asset->{ url }, hotspot }
+      "imageUrl": image.asset->url
     }`,
     []
   );
@@ -333,7 +360,7 @@ export async function getHeroSlides() {
       slide.subtext ?? fallbackHeroSlides[index]?.subheadline ?? "",
     cta: slide.ctaText ?? fallbackHeroSlides[index]?.cta ?? "Shop now",
     href: slide.ctaLink ?? fallbackHeroSlides[index]?.href ?? "/shop",
-    image: slide.image?.asset?.url ?? fallbackHeroSlides[index]?.image ?? "",
+    image: slide.imageUrl ?? fallbackHeroSlides[index]?.image ?? "",
     alt: slide.headline ?? fallbackHeroSlides[index]?.alt ?? "GWETHBTL Leather"
   }));
 }
@@ -341,8 +368,9 @@ export async function getHeroSlides() {
 export async function getFeaturedProducts() {
   const products = await fetchOrFallback<SanityProduct[]>(
     `*[_type == "homepage"][0].featuredProducts[]->{
-      _id, name, slug, price, stockStatus,
-      images[]{ asset->{ url }, hotspot },
+      _id, name, "slug": slug.current, category, price, stockStatus,
+      "imageUrl": images[0].asset->url,
+      images[]{ asset->{ url } },
       colors[]{ name, hex },
       description
     }`,
@@ -350,14 +378,17 @@ export async function getFeaturedProducts() {
   );
 
   if (!products.length) return fallbackFeaturedProducts;
-  return products.map(mapProduct).filter((product) => product.images.length);
+
+  const mapped = products.map(mapProduct).filter((product) => product.images.length);
+  return mapped.length ? mapped : fallbackFeaturedProducts;
 }
 
 export async function getProductOfMonth() {
   const product = await fetchOrFallback<SanityProduct | null>(
     `*[_type == "product" && featured == true][0]{
-      _id, name, slug, price, stockStatus, featuredBlurb, description,
-      images[]{ asset->{ url }, hotspot },
+      _id, name, "slug": slug.current, category, price, stockStatus, featuredBlurb, description,
+      "imageUrl": images[0].asset->url,
+      images[]{ asset->{ url } },
       colors[]{ name, hex }
     }`,
     null
@@ -375,13 +406,67 @@ export async function getProductOfMonth() {
   };
 }
 
+export async function getAllProducts() {
+  const products = await fetchOrFallback<SanityProduct[]>(
+    `*[_type == "product"] | order(name asc){
+      _id, name, "slug": slug.current, category, price, stockStatus,
+      "imageUrl": images[0].asset->url,
+      images[]{ asset->{ url } },
+      colors[]{ name, hex },
+      description
+    }`,
+    []
+  );
+
+  if (!products.length) return fallbackProducts;
+
+  const mapped = products.map(mapProduct).filter((product) => product.images.length);
+  return mapped.length ? mapped : fallbackProducts;
+}
+
+export async function getProduct(slug: string) {
+  const product = await fetchOrFallback<SanityProduct | null>(
+    `*[_type == "product" && slug.current == $slug][0]{
+      _id, name, "slug": slug.current, category, price, stockStatus,
+      featuredBlurb, description,
+      "imageUrl": images[0].asset->url,
+      images[]{ asset->{ url } },
+      colors[]{ name, hex }
+    }`,
+    null,
+    { slug }
+  );
+
+  if (!product) {
+    return fallbackProducts.find((item) => item.slug === slug) ?? null;
+  }
+
+  const mapped = mapProduct(product);
+  return mapped.images.length
+    ? mapped
+    : fallbackProducts.find((item) => item.slug === slug) ?? null;
+}
+
+export async function getProductSlugs() {
+  const products = await fetchOrFallback<{ slug: string }[]>(
+    `*[_type == "product"]{ "slug": slug.current }`,
+    []
+  );
+
+  if (!products.length) {
+    return fallbackProducts.map((product) => ({ slug: product.slug }));
+  }
+
+  return products.filter((product) => Boolean(product.slug));
+}
+
 export async function getRecentBlogPosts(limit?: number) {
   const posts = await fetchOrFallback<SanityBlogPost[]>(
     `*[_type == "post" && published == true] | order(publishedAt desc)${
       limit ? `[0...${limit}]` : ""
     }{
-      _id, title, slug, publishedAt, author, excerpt,
-      coverImage{ asset->{ url }, hotspot }
+      _id, title, "slug": slug.current, publishedAt, author, excerpt,
+      "coverImageUrl": coverImage.asset->url
     }`,
     []
   );
@@ -393,8 +478,8 @@ export async function getRecentBlogPosts(limit?: number) {
 export async function getBlogPost(slug: string) {
   const post = await fetchOrFallback<SanityBlogPost | null>(
     `*[_type == "post" && slug.current == $slug && published == true][0]{
-      _id, title, slug, author, publishedAt, body, excerpt,
-      coverImage{ asset->{ url }, hotspot }
+      _id, title, "slug": slug.current, author, publishedAt, body, excerpt,
+      "coverImageUrl": coverImage.asset->url
     }`,
     null,
     { slug }
@@ -425,7 +510,7 @@ export async function getTestimonials() {
   const testimonials = await fetchOrFallback<SanityTestimonial[]>(
     `*[_type == "testimonial" && published == true]{
       _id, name, handle, review, rating,
-      photo{ asset->{ url }, hotspot }
+      "photoUrl": photo.asset->url
     }`,
     []
   );

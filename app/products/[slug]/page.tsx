@@ -5,7 +5,8 @@ import { ProductGallery } from "@/components/product-gallery";
 import { ProductInfo } from "@/components/product-info";
 import { RelatedProducts } from "@/components/related-products";
 import { StickyAddToCart } from "@/components/sticky-add-to-cart";
-import { categories, primaryImage, products } from "@/lib/data";
+import { categories, primaryImage } from "@/lib/data";
+import { getAllProducts, getProduct, getProductSlugs } from "@/sanity/lib/queries";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -22,7 +23,7 @@ export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = products.find((item) => item.slug === slug);
+  const product = await getProduct(slug);
 
   if (!product) {
     return {};
@@ -46,13 +47,16 @@ export async function generateMetadata({
   };
 }
 
-export function generateStaticParams() {
-  return products.map((product) => ({ slug: product.slug }));
+export async function generateStaticParams() {
+  return getProductSlugs();
 }
 
 export default async function ProductPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = products.find((item) => item.slug === slug);
+  const [product, products] = await Promise.all([
+    getProduct(slug),
+    getAllProducts()
+  ]);
 
   if (!product) {
     notFound();

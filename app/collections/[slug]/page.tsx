@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { ProductCard } from "@/components/product-card";
-import { categories, products } from "@/lib/data";
+import { categories } from "@/lib/data";
+import { getAllProducts } from "@/sanity/lib/queries";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -33,6 +34,7 @@ export function generateStaticParams() {
 
 export default async function CollectionPage({ params }: PageProps) {
   const { slug } = await params;
+  const products = await getAllProducts();
   const category = categories.find((item) => item.slug === slug);
 
   if (!category) {
@@ -70,7 +72,7 @@ export default async function CollectionPage({ params }: PageProps) {
           </label>
         </div>
         <div className="mt-10 grid gap-8 lg:grid-cols-[18rem_1fr]">
-          <FilterSidebar />
+          <FilterSidebar products={products} />
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {visibleProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

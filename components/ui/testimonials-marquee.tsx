@@ -1,7 +1,10 @@
 "use client";
 
 import React from "react";
-import type { Testimonial } from "@/sanity/lib/queries";
+import {
+  fallbackTestimonials,
+  type Testimonial
+} from "@/sanity/lib/queries";
 
 const StarIcon = () => (
   <svg
@@ -70,13 +73,16 @@ function MarqueeRow({
 }
 
 export default function TestimonialsMarquee({
-  testimonials
+  testimonials = []
 }: {
   testimonials: Testimonial[];
 }) {
-  const midpoint = Math.ceil(testimonials.length / 2);
-  const rowOne = testimonials.slice(0, midpoint);
-  const rowTwo = testimonials.slice(midpoint);
+  const displayTestimonials = testimonials.length
+    ? testimonials
+    : fallbackTestimonials;
+  const midpoint = Math.ceil(displayTestimonials.length / 2);
+  const rowOne = displayTestimonials.slice(0, midpoint);
+  const rowTwo = displayTestimonials.slice(midpoint);
 
   return (
     <>

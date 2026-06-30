@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Grid2X2, Heart, List, Search } from "lucide-react";
 import { ShopAddToCartButton } from "@/components/shop-add-to-cart-button";
-import { categories, colorHex, formatPrice, primaryImage, products } from "@/lib/data";
+import { categories, colorHex, formatPrice, primaryImage } from "@/lib/data";
+import { getAllProducts } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -14,34 +15,23 @@ export const metadata: Metadata = {
   }
 };
 
-const shopProducts = Array.from({ length: 12 }, (_, index) => {
-  const product = products[index % products.length];
-  const names = [
-    product.name,
-    `Premium ${product.name}`,
-    `${product.colors[0]?.name ?? "Leather"} ${product.name}`
-  ];
-
-  return {
+export default async function ShopPage() {
+  const products = await getAllProducts();
+  const shopProducts = products.map((product) => ({
     ...product,
-    listId: `${product.id}-${index}`,
-    displayName: names[index % names.length],
-    price: product.price + (index % 3) * 1200
-  };
-});
+    listId: product.id,
+    displayName: product.name
+  }));
+  const colors = Array.from(
+    new Map(
+      products.flatMap((product) =>
+        product.colors.map((color) => [color.name, color])
+      )
+    ).values()
+  );
+  const productTypes = Array.from(new Set(products.map((product) => product.type)));
+  const featured = products.slice(0, 3);
 
-const colors = Array.from(
-  new Map(
-    products.flatMap((product) =>
-      product.colors.map((color) => [color.name, color])
-    )
-  ).values()
-);
-
-const productTypes = Array.from(new Set(products.map((product) => product.type)));
-const featured = products.slice(0, 3);
-
-export default function ShopPage() {
   return (
     <main className="bg-background">
       <section className="relative isolate min-h-[22rem] overflow-hidden">

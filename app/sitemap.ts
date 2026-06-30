@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
-import { categories, products } from "@/lib/data";
+import { categories } from "@/lib/data";
+import { getAllProducts } from "@/sanity/lib/queries";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://gwethbtlleather.co.ke";
+  const products = await getAllProducts();
 
   return [
     {
