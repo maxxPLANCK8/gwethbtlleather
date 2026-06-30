@@ -1,6 +1,7 @@
+import type { SchemaTypeDefinition } from "sanity";
 import homepage from "./homepage";
 import post from "./post";
 import product from "./product";
 import testimonial from "./testimonial";
 
-export const schemaTypes = [product, post, homepage, testimonial];
+export const schemaTypes = [product, post, homepage, testimonial] as SchemaTypeDefinition[];

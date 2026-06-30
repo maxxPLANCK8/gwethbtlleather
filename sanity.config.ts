@@ -1,13 +1,14 @@
-import { visionTool } from "@sanity/vision";
-import { defineConfig } from "sanity";
-import { structureTool } from "sanity/structure";
-import { schemaTypes } from "./sanity/schemas";
+import { defineConfig } from 'sanity'
+import { structureTool } from 'sanity/structure'
+import { visionTool } from '@sanity/vision'
+import { schemaTypes } from './sanity/schemas'
 
 export default defineConfig({
-  name: "gwethbtl-leather",
-  title: "GWETHBTL Leather",
+  name: 'gwethbtl-leather',
+  title: 'GWETHBTL Leather',
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  basePath: '/studio',
   plugins: [structureTool(), visionTool()],
-  schema: { types: schemaTypes as any }
-});
+  schema: { types: schemaTypes },
+})
