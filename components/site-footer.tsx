@@ -76,6 +76,16 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
+              <Link href="/privacy-policy" className="hover:text-white">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="hover:text-white">
+                Terms & Conditions
+              </Link>
+            </li>
+            <li>
               <Link href="/corporate-gifting" className="hover:text-white">
                 Corporate gifting
               </Link>
